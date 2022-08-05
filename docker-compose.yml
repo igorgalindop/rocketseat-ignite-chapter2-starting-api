@@ -1,6 +1,18 @@
 version: "3.7"
 
 services:
+    database_ignite:
+        image: postgres
+        container_name: database_ignite
+        restart: always
+        ports:
+            - 5433:5432
+        environment:
+            - POSTGRES_USER=docker
+            - POSTGRES_PASSWORD=ignite
+            - POSTGRES_DB=api-node-chapter2
+        volumes:
+            - pgdata:/data/postgres
     app: 
         build: .
         container_name: first-api-node
@@ -8,3 +20,11 @@ services:
             - 3333:3333
         volumes:
             - .:/user/app
+        links:
+            - database_ignite
+        depends_on:
+            - database_ignite
+
+volumes:
+    pgdata:
+        driver: local
